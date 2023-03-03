@@ -15,7 +15,29 @@ return new class extends Migration
     {
         Schema::create('favorites', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
+            $table->unsignedBigInteger('user_id')->comment('ユーザID');
+            $table->unsignedBigInteger('tweet_id')->comment('ツイートID');
+
+            $table->index('id');
+            $table->index('user_id');
+            $table->index('tweet_id');
+
+            $table->unique([
+                'user_id',
+                'tweet_id'
+            ]);
+
+            $table->foreign('user_id')
+                ->references('id')
+                ->on('users')
+                ->onDelete('cascade')
+                ->onUpdate('cascade');
+
+            $table->foreign('tweet_id')
+                ->references('id')
+                ->on('tweets')
+                ->onDelete('cascade')
+                ->onUpdate('cascade');
         });
     }
 

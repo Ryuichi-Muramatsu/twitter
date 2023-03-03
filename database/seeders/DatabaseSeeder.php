@@ -20,6 +20,11 @@ class DatabaseSeeder extends Seeder
         $this->call([
             JobSeeder::class,
             SampleSeeder::class,
+            UsersTableSeeder::class,
+            TweetsTableSeeder::class,
+            CommentsTableSeeder::class,
+            FavoritesTableSeeder::class,
+            FollowersTableSeeder::class,
         ]);
         // 追加※Sampleモデルのファクトリメソッドを実行。
         Sample::factory()->count(10)->create();

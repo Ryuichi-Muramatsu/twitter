@@ -15,7 +15,20 @@ return new class extends Migration
     {
         Schema::create('tweets', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('user_id')->comment('ユーザID');
+            $table->string('text')->comment('本文');
+            $table->softDeletes();
             $table->timestamps();
+
+            $table->index('id');
+            $table->index('user_id');
+            $table->index('text');
+
+            $table->foreign('user_id')
+            ->references('id')
+            ->on('users')
+            ->cascadeOnDelete()
+            ->cascadeOnUpdate();
         });
     }
 
