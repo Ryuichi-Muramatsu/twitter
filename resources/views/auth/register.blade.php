@@ -2,6 +2,13 @@
     <form method="POST" action="{{ route('register') }}">
         @csrf
 
+        <!-- Screen Name -->
+        <div>
+            <x-input-label for="screen_name" :value="__('Account Name')" />
+            <x-text-input id="screen_name" class="block mt-1 w-full" type="text" name="screen_name" :value="old('screen_name')" required autofocus autocomplete="screen_name" />
+            <x-input-error :messages="$errors->get('screen_name')" class="mt-2" />
+        </div>
+
         <!-- Name -->
         <div>
             <x-input-label for="name" :value="__('Name')" />
