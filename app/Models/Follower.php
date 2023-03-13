@@ -21,4 +21,14 @@ class Follower extends Model
 
     public $timestamps = false;
     public $incrementing = false;
+
+    public function getFollowCount(Int $user_id)
+    {
+        return $this->where('following_id',$user_id)->count();
+    }
+
+    public function getFollowerCount(Int $user_id)
+    {
+        return $this->where('followed_id',$user_id)->count();
+    }
 }

@@ -26,35 +26,31 @@ class UsersController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
      * Display the specified resource.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(User $user,Tweet $tweet,Follower $follower)
     {
-        //
+        $login_user = auth()->user();
+        $is_following = $login_user->isFollowing($user->id);
+        $is_followed = $login_user->isFollowed($user->id);
+        $timelines = $tweet->getUserTimeLine($user->id);
+        $tweet_count = $tweet->getTweetCount($user->id);
+        $follow_count = $follower->getFollowCount($user->id);
+        $follower_count = $follower->getFollowerCount($user->id);
+
+        return view('users.show',[
+            'login_user' => $login_user,
+            'user' => $user,
+            'is_following' => $is_following,
+            'is_followed' => $is_followed,
+            'timelines' => $timelines,
+            'tweet_count' => $tweet_count,
+            'follow_count' => $follow_count,
+            'follower_count' => $follower_count
+        ]);
     }
 
     /**
@@ -63,9 +59,9 @@ class UsersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(User $user)
     {
-        //
+        return view('users.edit',['user' => $user]);
     }
 
     /**
@@ -75,19 +71,52 @@ class UsersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request,User $user)
     {
-        //
+        $data = $request->all();
+        $user->updateProfile($data);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
+    // フォロー
+    public function follow(User $user)
     {
-        //
+        $follower = auth()->user();
+        
+        $is_following = $follower->isFollowing($user->id);
+        if(!$is_following){
+            // フォローしていなければフォローする
+            $follower->follow($user->id);
+            return back();
+        }
     }
+
+    // フォロー解除
+    public function unfollow(User $user)
+    {
+        $follower = auth()->user();
+        
+        $is_following = $follower->isFollowing($user->id);
+        if($is_following){
+            // フォローしていなければフォローする
+            $follower->unfollow($user->id);
+            return back();
+        }   
+    }
+
 }
+
+
+// 下記、アップデート実行時のデータの流れ
+
+// 編集ブレードで更新ボタンを押下したら、コントローラのupdateメソッドが走る。
+// フォームから受けっとたデータをupdateメソッドでバリデート
+// 本命のアップデートはモデルに定義したupdateProfileメソッドで実行
+// リクエストに画像データの有無で、画像保存の処理を入れるか振り分ける。
+
+
+
+
+
+/**
+ * リソースコントローラもルート名が自動で設定されるようになっている。
+ */
