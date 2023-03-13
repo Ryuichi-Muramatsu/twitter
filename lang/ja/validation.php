@@ -153,6 +153,11 @@ return [
     |
     */
 
-    'attributes' => [],
+    'attributes' => [
+        'name' => '名前',
+        'screen_name' => 'アカウント名',
+        'email' => 'メールアドレス',
+        'profile_image' => 'プロフィール画像'
+    ],
 
 ];

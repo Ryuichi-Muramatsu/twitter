@@ -1,6 +1,11 @@
 <x-applayout>
     <div class="container-wrapper">
         <div class="container target-user">
+            @if (session('flash_message'))
+                <div class="flash_message">
+                    {{ session('flash_message') }}
+                </div>
+            @endif
             <div class="img-etc">
                 <img style="width:50px" class="profile_image" src="{{ asset('storage/profile_image/'.$user->profile_image) }}" alt="">
                 @if ($login_user->id === $user->id)

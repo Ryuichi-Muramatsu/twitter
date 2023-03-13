@@ -73,3 +73,18 @@ p{
     display: inline;
     padding: 5px;
 }
+
+.alert{
+    color: red;
+}
+
+.flash_message{
+    color: #1E90FF;
+}
+
+.back_button{
+    background-color: orange;
+    border-radius: 10px;
+    display: inline;
+    padding: 5px;
+}
